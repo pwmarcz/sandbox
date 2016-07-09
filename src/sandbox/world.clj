@@ -1,9 +1,14 @@
 (ns sandbox.world)
 
-(defn make-creature [id pos]
-  {:type :goblin
-   :id id
-   :pos pos})
+(defn make-creature []
+  {:type :goblin})
+
+(defn world-add-creature [world creature pos]
+  (let [id (:next-creature-id world)
+        creature (assoc creature :pos pos :id id)]
+    (-> world
+        (assoc-in [:creatures (:id creature)] creature)
+        (update :next-creature-id inc))))
 
 (defn world-creature-at [world pos]
   (some (fn [[id creature]]
@@ -26,5 +31,5 @@
   {:map (make-map w h)
    :width w
    :height h
-   :creatures {42 (make-creature 42 [2 2])
-               45 (make-creature 45 [3 5])}})
+   :creatures {}
+   :next-creature-id 0})

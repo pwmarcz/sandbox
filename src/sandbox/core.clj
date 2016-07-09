@@ -29,5 +29,9 @@
   (let [world (make-world 10 10)]
     (println (render-world world))))
 
-(def ^:dynamic *world* (make-world 10 10))
+(def ^:dynamic *world*
+  (-> (make-world 10 10)
+      (world-add-creature (make-creature) [3 3])
+      (world-add-creature (make-creature) [5 5])))
+
 (println (render-world *world*))
