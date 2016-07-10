@@ -10,7 +10,8 @@
 
 (defn render-creature [creature]
   (case (:type creature)
-    :goblin \g))
+    :goblin \g
+    :human \@))
 
 (defn render-world-at-tile [world pos]
   (let [creature (world-creature-at world pos)
@@ -26,12 +27,14 @@
                       (render-world-at-tile world [x y]))))))
 
 (defn -main [& args]
-  (let [world (make-world 10 10)]
+  (let [world (make-world 10 10)
+        [world goblin-id] (world-add-creature world
+                                              (make-creature :goblin)
+                                              [1 1])
+        [world human-id] (world-add-creature world
+                                              (make-creature :human)
+                                              [2 2])
+        events (apply-command world {:type :move, :creature-id human-id, :dir :n})
+        world (apply-events world events)]
+    (println events)
     (println (render-world world))))
-
-(def ^:dynamic *world*
-  (-> (make-world 10 10)
-      (world-add-creature (make-creature) [3 3])
-      (world-add-creature (make-creature) [5 5])))
-
-(println (render-world *world*))
