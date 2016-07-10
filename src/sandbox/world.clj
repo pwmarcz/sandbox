@@ -17,8 +17,11 @@
             creature))
         (:creatures world)))
 
-(defn world-tile-at [world pos]
-  (get-in (:map world) pos))
+(defn world-creature [world creature-id]
+  (get-in world [:creatures creature-id]))
+
+(defn world-tile-at [world [x y]]
+  (get-in (:map world) [y x]))
 
 (defn tile-walkable? [tile]
   (= tile :floor))
@@ -68,3 +71,6 @@
              (nil? (world-creature-at world new-pos)))
       [{:type :move :creature-id creature-id :dir dir}]
       [])))
+
+(defmethod apply-command :wait [world _]
+  [])
